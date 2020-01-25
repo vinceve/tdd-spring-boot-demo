@@ -64,4 +64,43 @@ public class ArtistTests {
         assertThat(errors, Matchers.not(violates(on("name"))));
     }
 
+    @Test
+    public void startedAtCannotBeLowerThen1900() {
+        Artist artist = new Artist();
+        artist.setStartedAt(1500);
+
+        final Set<ConstraintViolation<Artist>> errors = this.validator.validate(artist);
+
+        assertThat(errors, violates(on("startedAt")));
+    }
+
+    @Test
+    public void startedAtCanBe1900() {
+        Artist artist = new Artist();
+        artist.setStartedAt(1900);
+
+        final Set<ConstraintViolation<Artist>> errors = this.validator.validate(artist);
+
+        assertThat(errors, Matchers.not(violates(on("startedAt"))));
+    }
+
+    @Test
+    public void startedAtCannotBeHigherThen2020() {
+        Artist artist = new Artist();
+        artist.setStartedAt(2025);
+
+        final Set<ConstraintViolation<Artist>> errors = this.validator.validate(artist);
+
+        assertThat(errors, violates(on("startedAt")));
+    }
+
+    @Test
+    public void startedAtCanBe2020() {
+        Artist artist = new Artist();
+        artist.setStartedAt(2020);
+
+        final Set<ConstraintViolation<Artist>> errors = this.validator.validate(artist);
+
+        assertThat(errors, Matchers.not(violates(on("startedAt"))));
+    }
 }

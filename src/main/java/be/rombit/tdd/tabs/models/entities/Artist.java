@@ -6,9 +6,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -18,4 +16,9 @@ public class Artist extends AbstractPersistable<Long> {
     @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String name;
+
+    @Min(1900)
+    @Max(2020)
+    @Column(nullable = false)
+    private int startedAt;
 }
