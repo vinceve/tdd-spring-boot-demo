@@ -4,6 +4,7 @@ import be.rombit.tdd.tabs.DataFactory;
 import be.rombit.tdd.tabs.models.entities.Artist;
 import be.rombit.tdd.tabs.models.repositories.ArtistRepository;
 import be.rombit.tdd.tabs.services.exceptions.BusinessValidationException;
+import be.rombit.tdd.tabs.services.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import javax.validation.ValidationException;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,6 +57,70 @@ public class ArtistServiceTests {
 
         assertThrows(BusinessValidationException.class, () -> {
             this.artistService.create(artist);
+        });
+    }
+
+    @Test
+    @Transactional
+    public void updateSavesAnUpdatedArtistToTheDb() {
+        Artist artist = new DataFactory().getArtist();
+        artist = this.artistRepository.save(artist);
+
+        Artist newArtist = new Artist();
+        newArtist.setName("Mob Barley");
+        newArtist.setStartedAt(1973);
+
+        this.artistService.update(artist.getId(), newArtist);
+
+        artist = this.artistRepository.findById(artist.getId()).get();
+
+        assertEquals("Mob Barley", artist.getName());
+    }
+
+    @Test
+    @Transactional
+    public void updateCopiesThePropertiesCorrectly() {
+        // NOTE: For the sake of the deep dive we will keep this simple and test this here. In real life situations
+        // we would use a mapper class and test that one out.
+
+        Artist artist = new DataFactory().getArtist();
+        artist = this.artistRepository.save(artist);
+
+        Artist newArtist = new Artist();
+        newArtist.setName("Mob Barley");
+        newArtist.setStartedAt(1900);
+
+        this.artistService.update(artist.getId(), newArtist);
+
+        artist = this.artistRepository.findById(artist.getId()).get();
+
+        assertEquals("Mob Barley", artist.getName());
+        assertEquals(1900, artist.getStartedAt());
+    }
+
+    @Test
+    @Transactional
+    public void updateReturnsAnErrorWhenTheArtistHasNotBeenFound() {
+        Artist newArtist = new Artist();
+        newArtist.setName("Mob Barley");
+
+        assertThrows(NotFoundException.class, () -> {
+            this.artistService.update(-1, newArtist);
+        });
+    }
+
+    @Test
+    @Transactional
+    public void updateReturnsAListOfErrors() {
+        Artist artist = new DataFactory().getArtist();
+        artist = this.artistRepository.save(artist);
+
+        Artist newArtist = new Artist();
+        newArtist.setName(null);
+
+        Artist finalArtist = artist;
+        assertThrows(BusinessValidationException.class, () -> {
+            this.artistService.update(finalArtist.getId(), newArtist);
         });
     }
 }
