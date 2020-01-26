@@ -14,9 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -121,6 +121,27 @@ public class ArtistServiceTests {
         Artist finalArtist = artist;
         assertThrows(BusinessValidationException.class, () -> {
             this.artistService.update(finalArtist.getId(), newArtist);
+        });
+    }
+
+    @Test
+    @Transactional
+    public void deleteRemovesAnArtistFromTheDb() {
+        Artist artist = new DataFactory().getArtist();
+        artist = this.artistRepository.save(artist);
+
+        this.artistService.delete(artist.getId());
+
+        Optional<Artist> deletedArtist = this.artistRepository.findById(artist.getId());
+
+        assertFalse(deletedArtist.isPresent());
+    }
+
+    @Test
+    @Transactional
+    public void deleteReturnsAnErrorWhenTheArtistHasNotBeenFound() {
+        assertThrows(NotFoundException.class, () -> {
+            this.artistService.delete(-1);
         });
     }
 }

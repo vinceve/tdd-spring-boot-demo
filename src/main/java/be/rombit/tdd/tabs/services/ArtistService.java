@@ -49,4 +49,10 @@ public class ArtistService {
 
         this.artistRepository.save(foundArtist);
     }
+
+    @Transactional
+    public void delete(long id) {
+        Artist foundArtist = this.artistRepository.findById(id).orElseThrow(NotFoundException::new);
+        this.artistRepository.delete(foundArtist);
+    }
 }
