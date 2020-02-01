@@ -3,10 +3,9 @@ package be.rombit.tdd.tabs.controllers;
 import be.rombit.tdd.tabs.models.entities.Artist;
 import be.rombit.tdd.tabs.services.ArtistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +21,9 @@ public class ArtistController {
         return ResponseEntity.ok(artists);
     }
 
+    @PostMapping
+    public ResponseEntity<String> create(@RequestBody Artist artist) {
+        this.artistService.create(artist);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }
