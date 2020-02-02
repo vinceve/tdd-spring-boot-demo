@@ -1,0 +1,28 @@
+{
+  "id" : "6c903ffc-cad7-33ae-854e-8b9e03bbe891",
+  "request" : {
+    "url" : "/songs.json?pattern=Gojira",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-songs.json-h1jCz.json",
+    "headers" : {
+      "Server" : "nginx",
+      "Date" : "Sun, 02 Feb 2020 13:38:12 GMT",
+      "Content-Type" : "application/json",
+      "Connection" : "keep-alive",
+      "access-control-allow-origin" : "*",
+      "Cache-Control" : "max-age=60",
+      "Expires" : "Sun, 02 Feb 2020 13:39:12 GMT",
+      "Vary" : "Accept-Encoding,User-Agent",
+      "Access-Control-Allow-Credentials" : "true",
+      "X-Robots-Tag" : "noindex",
+      "Strict-Transport-Security" : "max-age=31536000; includeSubDomains; preload",
+      "X-Frame-Options" : "Deny",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff"
+    }
+  },
+  "uuid" : "6c903ffc-cad7-33ae-854e-8b9e03bbe891"
+}
